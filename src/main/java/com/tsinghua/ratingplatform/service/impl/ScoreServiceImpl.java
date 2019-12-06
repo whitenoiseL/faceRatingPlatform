@@ -36,8 +36,7 @@ public class ScoreServiceImpl implements ScoreService {
 
     @Override
     public Score findRate(Integer uid) {
-        return scoreRepository.findById(uid).orElse(null);
+        return scoreRepository.findByUserId(uid);
     }
-
 
 }
