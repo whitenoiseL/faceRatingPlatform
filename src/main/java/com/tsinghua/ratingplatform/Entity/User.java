@@ -12,6 +12,8 @@ public class User {
     private Integer gender;
     @Column(name = "age")
     private Integer age;
+    @Column(name = "finished")
+    private Integer finished;
 
     public Integer getUserId() {
         return userId;
@@ -37,4 +39,11 @@ public class User {
         this.age = age;
     }
 
+    public Integer getFinished() {
+        return finished;
+    }
+
+    public void setFinished(Integer finished) {
+        this.finished = finished;
+    }
 }

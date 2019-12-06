@@ -31,6 +31,26 @@ public class RatingController {
         return bytes;
     }
 
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    public int login(@RequestParam Integer uid)  {
+        User user = userService.findUser(uid);
+        if ( user == null) {
+            return 0;
+        } else {
+            return 1;
+        }
+    }
+
+    @RequestMapping(value = "/register", method = RequestMethod.GET)
+    public int login(@RequestParam Integer uid, @RequestParam Integer gender, @RequestParam Integer age)  {
+        User user = new User();
+        user.setUserId(uid);
+        user.setGender(gender);
+        user.setAge(age);
+        userService.addUser(user);
+        return 1;
+    }
+
     @RequestMapping(value = "/updatePreference", method = RequestMethod.GET)
     public int updatePreference(@RequestParam Integer uid, @RequestParam Integer pid, @RequestParam Integer score)  {
         Score rate = new Score();
@@ -41,23 +61,12 @@ public class RatingController {
         return 1;
     }
 
-    @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public int login(@RequestParam Integer userId)  {
-        User user = userService.findUser(userId);
-        if ( user == null) {
-            return 0;
-        } else {
-            return 1;
-        }
-    }
-
-    @RequestMapping(value = "/register", method = RequestMethod.GET)
-    public int login(@RequestParam Integer userId, @RequestParam Integer gender, @RequestParam Integer age)  {
-        User user = new User();
-        user.setUserId(userId);
-        user.setGender(gender);
-        user.setAge(age);
-        userService.addUser(user);
+    @RequestMapping(value = "/updateRateTimes", method = RequestMethod.GET)
+    public int updateRateTimes(@RequestParam Integer uid)  {
+        User user = userService.findUser(uid);
+        int finished = user.getFinished();
+        user.setFinished(finished + 1);
+        userService.modifyUser(user);
         return 1;
     }
 }
