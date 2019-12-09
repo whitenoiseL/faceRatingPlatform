@@ -2,6 +2,7 @@ package com.tsinghua.ratingplatform.Rating;
 
 import com.tsinghua.ratingplatform.service.*;
 import com.tsinghua.ratingplatform.Entity.*;
+import com.alibaba.fastjson.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.MediaType;
@@ -32,21 +33,34 @@ public class RatingController {
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public int login(@RequestParam Integer uid)  {
+    public JSONObject login(@RequestParam Integer uid)  {
         User user = userService.findUser(uid);
+        JSONObject res = new JSONObject();
         if ( user == null) {
-            return 0;
+            res.put("result",0);
+            return res;
         } else {
-            return 1;
+            JSONObject detail = new JSONObject();
+            int userId = user.getUserId();
+            if (userId/100 > 1) {
+                detail.put("userid",user.getUserId());
+            }
+            detail.put("gender",user.getGender());
+            detail.put("age",user.getAge());
+            detail.put("finished",user.getFinished());
+            res.put("result",1);
+            res.put("detail",detail);
+            return res;
         }
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.GET)
-    public int login(@RequestParam Integer uid, @RequestParam Integer gender, @RequestParam Integer age)  {
+    public int login(@RequestParam Integer uid, @RequestParam Integer gender, @RequestParam Integer age, @RequestParam Integer finished)  {
         User user = new User();
         user.setUserId(uid);
         user.setGender(gender);
         user.setAge(age);
+        user.setFinished(finished);
         userService.addUser(user);
         return 1;
     }
@@ -67,6 +81,6 @@ public class RatingController {
         int finished = user.getFinished();
         user.setFinished(finished + 1);
         userService.modifyUser(user);
-        return 1;
+        return finished + 1;
     }
 }
